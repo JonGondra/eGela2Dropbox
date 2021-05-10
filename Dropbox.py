@@ -8,8 +8,6 @@ from pip._vendor.distlib.compat import raw_input
 
 import helper
 
-app_key = ''
-app_secret = ''
 server_addr = "localhost"
 server_port = 8090
 redirect_uri = "http://" + server_addr + ":" + str(server_port)
@@ -158,12 +156,33 @@ class Dropbox:
 
         create_uri = 'https://api.dropboxapi.com/2/files/create_folder_v2'
         cabeceras = {'Authorization': 'Bearer ' + self._access_token,
-                     'Content-Type': 'application/octet-stream'}
+                     'Content-Type': 'application/json'}
         datos = {'path': path,
                  'autorename': False}
-        respuesta = requests.post(create_uri, headers=cabeceras, data=datos, allow_redirects=False)
+        datos_encoded = json.dumps(datos)
+        respuesta = requests.post(create_uri, headers=cabeceras, data=datos_encoded, allow_redirects=False)
         status = respuesta.status_code
         print("\tStatus: " + str(status))
         contenido = respuesta.text
         print("\tContenido:")
         print(contenido)
+
+    def download_links(self, file_path):
+        print("/download_links " + file_path)
+
+        download_uri = 'https://api.dropboxapi.com/2/files/get_temporary_link'
+        cabeceras = {'Authorization': 'Bearer ' + self._access_token,
+                     'Content-Type': 'application/json'}
+        datos = {"path": file_path}
+        datos_encoded = json.dumps(datos)
+        respuesta = requests.post(download_uri, headers=cabeceras, data=datos_encoded, allow_redirects=False)
+        r = json.loads(respuesta.content)
+        status = respuesta.status_code
+        print("\tStatus: " + str(status))
+        contenido = respuesta.text
+        print("\tContenido:")
+        print(contenido)
+        url = r["link"]
+        print(url)
+        webbrowser.open(url)
+
