@@ -123,7 +123,7 @@ class eGela:
         erantzuna = requests.request(metodo, uri, data=datuak, headers=goiburuak, allow_redirects=False)
 
         if (erantzuna.status_code == 200):
-            print("Ikasgaiaren orria ondo lortu da")
+            print("Web Sistemak")
             soup = BeautifulSoup(erantzuna.content, "html.parser")
             pdf_results = soup.find_all("div", {"class": "activityinstance"})
             kop = str(pdf_results).count("pdf")

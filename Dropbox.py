@@ -8,6 +8,8 @@ from pip._vendor.distlib.compat import raw_input
 
 import helper
 
+app_key = ''
+app_secret = ''
 server_addr = "localhost"
 server_port = 8090
 redirect_uri = "http://" + server_addr + ":" + str(server_port)
@@ -128,8 +130,7 @@ class Dropbox:
         cabeceras = {'Authorization': 'Bearer ' + self._access_token,
                      'Content-Type': 'application/octet-stream',
                      'Dropbox-API-Arg': json.dumps(jsonupload)}
-        datos = {'data-binary': file_data}
-        respuesta = requests.post(upload_uri, headers=cabeceras, data=datos, allow_redirects=False)
+        respuesta = requests.post(upload_uri, headers=cabeceras, data=file_data, allow_redirects=False)
         status = respuesta.status_code
         print("\tStatus: " + str(status))
         contenido = respuesta.text
